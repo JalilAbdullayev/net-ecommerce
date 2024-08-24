@@ -24,6 +24,7 @@
 
     <ItemGroup>
       <Folder Include="wwwroot\products\" />
+      <Folder Include="wwwroot\slider\" />
     </ItemGroup>
 
 </Project>

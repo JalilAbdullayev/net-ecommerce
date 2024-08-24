@@ -46,8 +46,20 @@ namespace netcore_ecommerce.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Header1,Header2,Context,Image")] Slider slider) {
+        public async Task<IActionResult> Create([Bind("Id,Name,Header1,Header2,Context,Image")] Slider slider,
+            IFormFile ImageUpload) {
             if(ModelState.IsValid) {
+                if(ImageUpload != null) {
+                    var ext = Path.GetExtension(ImageUpload.FileName);
+                    string newName = Guid.NewGuid().ToString() + ext;
+                    var path = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/slider/" + newName);
+                    using(var stream = new FileStream(path, FileMode.Create)) {
+                        await ImageUpload.CopyToAsync(stream);
+                    }
+
+                    slider.Image = newName;
+                }
+
                 _context.Add(slider);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -75,13 +87,28 @@ namespace netcore_ecommerce.Controllers {
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Header1,Header2,Context,Image")] Slider slider) {
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Header1,Header2,Context,Image")] Slider slider,
+            IFormFile? ImageUpload) {
+            var existing = await _context.Sliders.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
             if(id != slider.Id) {
                 return NotFound();
             }
 
             if(ModelState.IsValid) {
                 try {
+                    if(ImageUpload != null) {
+                        var ext = Path.GetExtension(ImageUpload.FileName);
+                        string newName = Guid.NewGuid().ToString() + ext;
+                        var path = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/slider/" + newName);
+                        using(var stream = new FileStream(path, FileMode.Create)) {
+                            await ImageUpload.CopyToAsync(stream);
+                        }
+
+                        slider.Image = newName;
+                    } else {
+                        slider.Image = existing.Image;
+                    }
+
                     _context.Update(slider);
                     await _context.SaveChangesAsync();
                 } catch(DbUpdateConcurrencyException) {
@@ -119,6 +146,13 @@ namespace netcore_ecommerce.Controllers {
         public async Task<IActionResult> DeleteConfirmed(int id) {
             var slider = await _context.Sliders.FindAsync(id);
             if(slider != null) {
+                string path = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/slider/" + slider.Image);
+                FileInfo pathFile = new FileInfo(path);
+                if(pathFile.Exists) {
+                    System.IO.File.Delete(pathFile.FullName);
+                    pathFile.Delete();
+                }
+
                 _context.Sliders.Remove(slider);
             }
 
