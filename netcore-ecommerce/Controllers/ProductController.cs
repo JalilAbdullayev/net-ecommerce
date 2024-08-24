@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -50,8 +46,20 @@ namespace netcore_ecommerce.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("ProductId,Name,Code,Description,Picture,Price,CategoryId")] Product product) {
+            [Bind("ProductId,Name,Code,Description,Picture,Price,CategoryId")] Product product,
+            IFormFile? ImageUpload) {
             if(ModelState.IsValid) {
+                if(ImageUpload != null) {
+                    var ext = Path.GetExtension(ImageUpload.FileName);
+                    string newName = Guid.NewGuid().ToString() + ext;
+                    var path = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/products/" + newName);
+                    using(var stream = new FileStream(path, FileMode.Create)) {
+                        await ImageUpload.CopyToAsync(stream);
+                    }
+
+                    product.Picture = newName;
+                }
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -82,13 +90,28 @@ namespace netcore_ecommerce.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("ProductId,Name,Code,Description,Picture,Price,CategoryId")] Product product) {
+            [Bind("ProductId,Name,Code,Description,Picture,Price,CategoryId")]
+            Product product, IFormFile? ImageUpload) {
+            var existing = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.ProductId == id);
             if(id != product.ProductId) {
                 return NotFound();
             }
 
             if(ModelState.IsValid) {
                 try {
+                    if(ImageUpload != null) {
+                        var ext = Path.GetExtension(ImageUpload.FileName);
+                        string newName = Guid.NewGuid().ToString() + ext;
+                        var path = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/products/" + newName);
+                        using(var stream = new FileStream(path, FileMode.Create)) {
+                            await ImageUpload.CopyToAsync(stream);
+                        }
+
+                        product.Picture = newName;
+                    } else {
+                        product.Picture = existing.Picture;
+                    }
+
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 } catch(DbUpdateConcurrencyException) {
@@ -128,6 +151,13 @@ namespace netcore_ecommerce.Controllers {
         public async Task<IActionResult> DeleteConfirmed(int id) {
             var product = await _context.Products.FindAsync(id);
             if(product != null) {
+                string path = Path.Combine(Directory.GetCurrentDirectory() + "/wwwroot/products/" + product.Picture);
+                FileInfo pathFile = new FileInfo(path);
+                if(pathFile.Exists) {
+                    System.IO.File.Delete(pathFile.FullName);
+                    pathFile.Delete();
+                }
+
                 _context.Products.Remove(product);
             }
 

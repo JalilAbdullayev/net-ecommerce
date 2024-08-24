@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace netcore_ecommerce.Models;
 
@@ -17,7 +18,8 @@ public class Product {
     public string? Description {get;set;} = string.Empty;
 
     [Display(Name = "Picture")]
-    public string? Picture {get;set;}
+    [ValidateNever]
+    public string? Picture {get;set;} = string.Empty;
 
     [Display(Name = "Price")]
     public int? Price {get;set;}
@@ -25,8 +27,9 @@ public class Product {
     [Display(Name = "Category")]
     public int? CategoryId {get;set;}
 
-    virtual public Category? Category {get;set;}
+    public virtual Category? Category {get;set;}
 
     [NotMapped]
+    [ValidateNever]
     public IFormFile? ImageUpload {get;set;}
 }
