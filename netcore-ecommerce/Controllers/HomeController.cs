@@ -1,18 +1,26 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using netcore_ecommerce.Data;
 using netcore_ecommerce.Models;
 
 namespace netcore_ecommerce.Controllers;
 
 public class HomeController: Controller {
     private readonly ILogger<HomeController> _logger;
+    private readonly ApplicationDbContext _context;
 
-    public HomeController(ILogger<HomeController> logger) {
+    public HomeController(ILogger<HomeController> logger, ApplicationDbContext context) {
         _logger = logger;
+        _context = context;
     }
 
     public IActionResult Index() {
         return View();
+    }
+
+    public IActionResult Details(int id) {
+        var result = _context.Products.Find(id);
+        return View(result);
     }
 
     public IActionResult Privacy() {
