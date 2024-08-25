@@ -16,7 +16,7 @@ namespace netcore_ecommerce.Controllers {
         public ActionResult Index() {
             List<CartItem> items = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
             CartViewModel cartVM = new() {Items = items, GrandTotal = items.Sum(x => x.Quantity * x.Price)};
-            return View();
+            return View(cartVM);
         }
 
         public async Task<IActionResult> Add(int id) {
