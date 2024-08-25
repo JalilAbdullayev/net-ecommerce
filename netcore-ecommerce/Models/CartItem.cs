@@ -1,6 +1,6 @@
 ﻿namespace netcore_ecommerce.Models;
 
-public class Cart {
+public class CartItem {
     public long ProductId {get;set;}
     public string ProductName {get;set;}
     public int Quantity {get;set;}
@@ -11,9 +11,9 @@ public class Cart {
         get {return Quantity * Price;}
     }
 
-    public Cart() {}
+    public CartItem() {}
 
-    public Cart(Product products) {
+    public CartItem(Product products) {
         ProductId = products.ProductId;
         ProductName = products.Name;
         Quantity = 1;
