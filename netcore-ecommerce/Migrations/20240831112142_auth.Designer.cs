@@ -12,8 +12,8 @@ using netcore_ecommerce.Data;
 namespace netcore_ecommerce.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240826015800_auth2")]
-    partial class auth2
+    [Migration("20240831112142_auth")]
+    partial class auth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

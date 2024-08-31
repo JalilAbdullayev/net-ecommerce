@@ -1,43 +1,52 @@
-﻿@{
+﻿@model netcore_ecommerce.DTO.AppUserRegister
+@{
     ViewBag.Title = "Register";
     Layout = "_AuthLayout";
 }
 
-<form class="form-horizontal form-material" id="loginform" method="POST">
+<form class="form-horizontal form-material" id="loginform" method="POST" asp-controller="Register">
     <h3 class="text-center m-b-20">Sign Up</h3>
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="form-group">
         <div class="col-xs-12">
-            <input class="form-control" type="text" name="FirstName" required placeholder="First name"/>
+            <input class="form-control" type="text" asp-for="FirstName" required placeholder="First name"/>
+            <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <div class="col-xs-12">
-            <input class="form-control" type="text" name="LastName" required placeholder="Last name"/>
+            <input class="form-control" type="text" asp-for="LastName" required placeholder="Last name"/>
+            <span asp-validation-for="LastName" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <div class="col-xs-12">
-            <input class="form-control" type="text" name="UserName" required placeholder="Name"/>
-        </div>
-    </div>
-    <div class="form-group">
-        <div class="col-xs-12">
-            <input class="form-control" type="text" name="UserName" required placeholder="User name"/>
+            <input class="form-control" type="text" asp-for="UserName" required placeholder="User name"/>
+            <span asp-validation-for="UserName" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group ">
         <div class="col-xs-12">
-            <input class="form-control" type="email" name="Email" required placeholder="Email"/>
+            <input class="form-control" type="email" asp-for="Email" required placeholder="Email"/>
+            <span asp-validation-for="Email" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group ">
         <div class="col-xs-12">
-            <input class="form-control" type="password" name="Password" required placeholder="Password"/>
+            <input class="form-control" type="text" asp-for="City" required placeholder="City"/>
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group ">
+        <div class="col-xs-12">
+            <input class="form-control" type="password" asp-for="Password" required placeholder="Password"/>
+            <span asp-validation-for="Password" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group">
         <div class="col-xs-12">
-            <input class="form-control" type="password" name="ConfirmPassword" required placeholder="Confirm password"/>
+            <input class="form-control" type="password" asp-for="ConfirmPassword" required placeholder="Confirm password"/>
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
     </div>
     <div class="form-group text-center p-b-20">
@@ -48,7 +57,7 @@
     <div class="form-group m-b-0">
         <div class="col-sm-12 text-center">
             Already have an account?
-            <a href="pages-login.html" class="text-info m-l-5">
+            <a href="/login" class="text-info m-l-5">
                 <b>Sign In</b>
             </a>
         </div>
