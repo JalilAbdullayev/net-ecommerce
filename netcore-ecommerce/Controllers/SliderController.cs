@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,6 +10,7 @@ using netcore_ecommerce.Data;
 using netcore_ecommerce.Models;
 
 namespace netcore_ecommerce.Controllers {
+    [Authorize]
     public class SliderController: Controller {
         private readonly ApplicationDbContext _context;
 
@@ -19,21 +21,6 @@ namespace netcore_ecommerce.Controllers {
         // GET: Slider
         public async Task<IActionResult> Index() {
             return View(await _context.Sliders.ToListAsync());
-        }
-
-        // GET: Slider/Details/5
-        public async Task<IActionResult> Details(int? id) {
-            if(id == null) {
-                return NotFound();
-            }
-
-            var slider = await _context.Sliders
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if(slider == null) {
-                return NotFound();
-            }
-
-            return View(slider);
         }
 
         // GET: Slider/Create
