@@ -23,8 +23,26 @@ public class HomeController: Controller {
         return View(result);
     }
 
-    public IActionResult Privacy() {
+    public IActionResult Shop() {
+        ViewBag.categories = _context.Categories.ToList();
+        ViewBag.products = _context.Products.ToList();
         return View();
+    }
+
+    public IActionResult Filter(int maxPrice, string searchName, int? categoryId) {
+        int minPrice = 0;
+        ViewBag.categories = _context.Categories.ToList();
+        var products = _context.Products.Where(p => p.Price >= minPrice && p.Price <= maxPrice);
+        if(!string.IsNullOrEmpty(searchName)) {
+            products = products.Where(p => p.Name.Contains(searchName));
+        }
+
+        if(categoryId.HasValue && categoryId > 0) {
+            products = products.Where(p => p.CategoryId == categoryId.Value);
+        }
+
+        ViewBag.products = products.ToList();
+        return View("Shop");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
