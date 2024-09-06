@@ -66,21 +66,70 @@
                 }
                 </tbody>
             </table>
+            @if(Model.Items.Count != 0) {
+                <div class="mb-4">
+                    <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
+                    <form action="/cart/checkout" method="POST">
+                        <div class="row">
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    Name
+                                </label>
+                                <input class="form-control" type="text" placeholder="Name" name="name" required/>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    E-mail
+                                </label>
+                                <input class="form-control" type="email" placeholder="example@email.com" name="email" required/>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    Phone
+                                </label>
+                                <input class="form-control" type="tel" placeholder="+994XXXXXXX" name="phone" required/>
+                            </div>
+                            <div class="col-md-6 form-group">
+                                <label>
+                                    Address
+                                </label>
+                                <input class="form-control" type="text" placeholder="123 Street" name="address" required/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            }
         </div>
         <div class="col-lg-4">
             <div class="card border-secondary mb-5">
                 <div class="card-header bg-secondary border-0">
-                    <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+                    <h4 class="font-weight-semi-bold m-0">
+                        Cart Summary
+                    </h4>
                 </div>
                 <div class="card-footer border-secondary bg-transparent">
                     <div class="d-flex justify-content-between mt-2">
-                        <h5 class="font-weight-bold">Total</h5>
-                        <h5 class="font-weight-bold">@Model.GrandTotal</h5>
+                        <h5 class="font-weight-bold">
+                            Total
+                        </h5>
+                        <h5 class="font-weight-bold">
+                            @Model.GrandTotal
+                        </h5>
                     </div>
-                    <button class="btn btn-block btn-primary my-3 py-3">Proceed To Checkout</button>
+                    <button class="btn btn-block btn-primary my-3 py-3" id="submit">
+                        Place Order
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 <!-- Cart End -->
+
+@section Scripts {
+    <script>
+        $('#submit').click(function () {
+            $('form').submit()
+        })
+    </script>
+}

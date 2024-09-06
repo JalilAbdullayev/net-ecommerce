@@ -9,4 +9,5 @@ public class ApplicationDbContext: IdentityDbContext<AppUser, AppRole, int> {
     public DbSet<Category> Categories {get;set;}
     public DbSet<Product> Products {get;set;}
     public DbSet<Slider> Sliders {get;set;}
+    public DbSet<Order> Orders {get;set;}
 }

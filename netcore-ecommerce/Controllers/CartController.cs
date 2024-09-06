@@ -69,5 +69,30 @@ namespace netcore_ecommerce.Controllers {
             TempData["message"] = "Cart cleared";
             return Redirect(Request.Headers["Referer"].ToString());
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Checkout() {
+            List<CartItem> items = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+            if(items.Count == 0) {
+                TempData["message"] = "Cart is empty";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart");
+            var order = new Order();
+            order.Id = Guid.NewGuid().ToString();
+            order.ProductId = cart.Select(x => x.ProductId).ToArray();
+            order.Quantity = cart.Select(x => x.Quantity).ToArray();
+            //order name comes from input
+            order.Name = Request.Form["name"];
+            order.Email = Request.Form["email"];
+            order.Phone = Request.Form["phone"];
+            order.Address = Request.Form["address"];
+            order.GrandTotal = Convert.ToDouble(cart.Sum(x => x.Quantity * x.Price));
+            _context.Orders.Add(order);
+            await _context.SaveChangesAsync();
+            HttpContext.Session.Remove("Cart");
+            return RedirectToAction("Index", "Home");
+        }
     }
 }

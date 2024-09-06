@@ -29,4 +29,8 @@
       <Folder Include="wwwroot\slider\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Views\Order\Index.cshtml" />
+    </ItemGroup>
+
 </Project>
