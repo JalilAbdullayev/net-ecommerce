@@ -32,7 +32,7 @@ namespace netcore_ecommerce.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("ProductId,Name,Code,Description,Picture,Price,CategoryId")] Product product,
+            [Bind("ProductId,Name,Code,Stock,Description,Picture,Price,CategoryId")] Product product,
             IFormFile? ImageUpload) {
             if(ModelState.IsValid) {
                 if(ImageUpload != null) {
@@ -76,7 +76,7 @@ namespace netcore_ecommerce.Controllers {
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
-            [Bind("ProductId,Name,Code,Description,Picture,Price,CategoryId")]
+            [Bind("ProductId,Name,Code,Stock,Description,Picture,Price,CategoryId")]
             Product product, IFormFile? ImageUpload) {
             var existing = await _context.Products.AsNoTracking().FirstOrDefaultAsync(p => p.ProductId == id);
             if(id != product.ProductId) {

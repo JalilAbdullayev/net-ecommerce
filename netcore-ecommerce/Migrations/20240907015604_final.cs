@@ -5,7 +5,7 @@
 namespace netcore_ecommerce.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class final : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -63,6 +63,23 @@ namespace netcore_ecommerce.Migrations
                         principalTable: "Categories",
                         principalColumn: "Id");
                 });
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProductId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Quantity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(50)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Phone = table.Column<string>(type: "varchar(14)", nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GrandTotal = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CategoryId",
@@ -73,14 +90,20 @@ namespace netcore_ecommerce.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Products");
+            migrationBuilder.DropColumn(
+                name: "Stock",
+                table: "Products");
 
-            migrationBuilder.DropTable(
-                name: "Sliders");
+            migrationBuilder.DropColumn(
+                name: "GrandTotal",
+                table: "Orders");
 
-            migrationBuilder.DropTable(
-                name: "Categories");
+            migrationBuilder.AddColumn<string>(
+                name: "Status",
+                table: "Orders",
+                type: "nvarchar(max)",
+                nullable: false,
+                defaultValue: "");
         }
     }
 }

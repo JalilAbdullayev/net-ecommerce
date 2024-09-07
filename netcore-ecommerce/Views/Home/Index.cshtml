@@ -42,3 +42,16 @@
 <!-- Products Start -->
 @await Component.InvokeAsync("Trends")
 <!-- Products End -->
+
+@section Scripts {
+    <script>
+        $('.add').click(function () {
+            var id = $(this).attr('id');
+            $.ajax({
+                type: 'POST',
+                url: '/cart/add/' + id,
+                async: true,
+            })
+        })
+    </script>
+}

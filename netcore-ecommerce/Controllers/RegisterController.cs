@@ -39,12 +39,12 @@ namespace netcore_ecommerce.Controllers {
                 mimeMessage.From.Add(mailboxAddressFrom);
                 mimeMessage.To.Add(mailboxAddressTo);
                 BodyBuilder bodyBuilder = new BodyBuilder();
-                bodyBuilder.TextBody = "You registered successfully" + code;
+                bodyBuilder.TextBody = "You registered successfully. " + code;
                 mimeMessage.Body = bodyBuilder.ToMessageBody();
                 mimeMessage.Subject = "Eshopper Registration";
                 SmtpClient client = new SmtpClient();
                 client.Connect("smtp.gmail.com", 587, false);
-                client.Authenticate("abdullacelil00@gmail.com", "fthw tkoa rbct sjsr\n");
+                client.Authenticate("abdullacelil00@gmail.com", "fthw tkoa rbct sjsr");
                 client.Send(mimeMessage);
                 client.Disconnect(true);
                 TempData["Mail"] = appUserRegister.Email;

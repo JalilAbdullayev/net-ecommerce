@@ -13,6 +13,9 @@ public class Product {
 
     [Display(Name = "Code")]
     public int? Code {get;set;}
+    
+    [Display(Name = "Stock")]
+    public int? Stock {get;set;}
 
     [Display(Name = "Description")]
     public string? Description {get;set;} = string.Empty;

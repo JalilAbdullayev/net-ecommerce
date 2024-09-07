@@ -19,6 +19,7 @@ namespace netcore_ecommerce.Controllers {
             return View(cartVM);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Add(int id) {
             Product product = await _context.Products.FindAsync(id);
             List<CartItem> items = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
@@ -43,10 +44,7 @@ namespace netcore_ecommerce.Controllers {
                 items.RemoveAll(x => x.ProductId == id);
             }
 
-            if(items.Count > 0) {
-                HttpContext.Session.SetJson("Cart", items);
-            }
-
+            HttpContext.Session.SetJson("Cart", items);
             TempData["message"] = "Product removed from cart";
             return Redirect(Request.Headers["Referer"].ToString());
         }
@@ -83,16 +81,30 @@ namespace netcore_ecommerce.Controllers {
             order.Id = Guid.NewGuid().ToString();
             order.ProductId = cart.Select(x => x.ProductId).ToArray();
             order.Quantity = cart.Select(x => x.Quantity).ToArray();
-            //order name comes from input
             order.Name = Request.Form["name"];
             order.Email = Request.Form["email"];
             order.Phone = Request.Form["phone"];
             order.Address = Request.Form["address"];
+            //decrease stock by quantity
+            foreach(var item in cart) {
+                var product = await _context.Products.FindAsync(Convert.ToInt32(item.ProductId));
+                product.Stock -= item.Quantity;
+                _context.Update(product);
+            }
+
             order.GrandTotal = Convert.ToDouble(cart.Sum(x => x.Quantity * x.Price));
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
             HttpContext.Session.Remove("Cart");
             return RedirectToAction("Index", "Home");
+        }
+
+        public IActionResult Increase(int id) {
+            List<CartItem> items = HttpContext.Session.GetJson<List<CartItem>>("Cart");
+            CartItem cartItem = items.Where(x => x.ProductId == id).FirstOrDefault();
+            cartItem.Quantity++;
+            HttpContext.Session.SetJson("Cart", items);
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }
