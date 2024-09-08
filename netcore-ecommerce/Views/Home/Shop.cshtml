@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Shop";
+    ViewData["Title"] = "Shop";
     Layout = "_Layout";
 }
 
@@ -37,8 +37,8 @@
                         </div>
                     </div>
                     <label for="maxPrice">Maximum Price: </label>
-                    <input type="range" id="maxPrice" name="maxPrice" min="0" max="1000" value="1000" oninput="this.nextElementSibling.value = this.value"/>
-                    <output>1000</output>
+                    <input type="range" id="maxPrice" name="maxPrice" min="0" max="30000" value="30000" oninput="this.nextElementSibling.value = this.value"/>
+                    <output>30000</output>
                     <select id="category" name="categoryId" class="form-control my-3">
                         <option value="">All Categories</option>
                         @foreach(var category in ViewBag.categories) {
@@ -64,11 +64,18 @@
                             </div>
                             <div class="card-body border-left border-right text-center p-0 pt-4 pb-3">
                                 <h6 class="text-truncate mb-3">
-                                    @product.Name
+                                    <a href="/home/details/@product.ProductId" class="text-decoration-none">
+                                        @product.Name
+                                    </a>
+                                    <p>
+                                        <a href="/home/category/@product.CategoryId" class="text-decoration-none">
+                                            @product.Category.Name
+                                        </a>
+                                    </p>
                                 </h6>
                                 <div class="d-flex justify-content-center">
                                     <h6>
-                                        $@product.Price
+                                        @product.Price₼
                                     </h6>
                                 </div>
                             </div>

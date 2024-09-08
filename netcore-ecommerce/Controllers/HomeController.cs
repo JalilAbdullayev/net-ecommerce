@@ -20,6 +20,7 @@ public class HomeController: Controller {
 
     public IActionResult Details(int id) {
         var result = _context.Products.Find(id);
+        ViewBag.category = _context.Categories.Find(result.CategoryId).Name;
         return View(result);
     }
 
@@ -42,6 +43,13 @@ public class HomeController: Controller {
         }
 
         ViewBag.products = products.ToList();
+        return View("Shop");
+    }
+
+    public IActionResult Category(int id) {
+        ViewBag.products = _context.Products.Where(p => p.CategoryId == id).ToList();
+        ViewBag.categories = _context.Categories.ToList();
+        ViewBag.category = _context.Categories.Find(id).Name;
         return View("Shop");
     }
 

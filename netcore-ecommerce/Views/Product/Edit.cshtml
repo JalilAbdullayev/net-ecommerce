@@ -1,7 +1,7 @@
 @model netcore_ecommerce.Models.Product
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Product";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 <div class="row page-titles">
@@ -52,7 +52,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control"/>
+                <textarea asp-for="Description" class="form-control d-block" rows="10"></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">

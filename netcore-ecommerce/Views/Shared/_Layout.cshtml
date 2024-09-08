@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <title>
-        EShopper
+        @ViewData["Title"]
     </title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="Free HTML Templates" name="keywords">
@@ -54,8 +54,6 @@
                         <a href="/home/shop" class="nav-item nav-link">
                             Shop
                         </a>
-                        <a href="checkout.html" class="nav-item nav-link">Checkout</a>
-                        <a href="contact.html" class="nav-item nav-link">Contact</a>
                     </div>
                     <partial name="_LogInOut"/>
                 </div>
@@ -85,8 +83,6 @@
                 <a class="text-dark mb-2" href="/home/shop">
                     <i class="fa fa-angle-right mr-2"></i>Shop
                 </a>
-                <a class="text-dark mb-2" href="checkout.html"><i class="fa fa-angle-right mr-2"></i>Checkout</a>
-                <a class="text-dark" href="contact.html"><i class="fa fa-angle-right mr-2"></i>Contact Us</a>
             </div>
         </div>
     </div>
@@ -112,6 +108,16 @@
 
 <!-- Template Javascript -->
 <script src="~/front/js/main.js"></script>
+<script>
+    $('.add').click(function () {
+        var id = $(this).attr('id');
+        $.ajax({
+            type: 'POST',
+            url: '/cart/add/' + id,
+            async: true,
+        })
+    })
+</script>
 @RenderSection("Scripts", false)
 </body>
 </html>
